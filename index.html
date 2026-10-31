@@ -9,8 +9,36 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <meta name="theme-color" content="#171a1b">
+  <noscript><style>#loader{display:none}</style></noscript>
+  <style>
+    .profile-art{animation:floatIn 1s ease both}
+    .portrait-wrap{height:430px;position:relative;overflow:hidden;border:1px solid #69716b;background:#2b2525;box-shadow:0 25px 70px rgba(0,0,0,.32)}
+    .profile-photo{width:100%;height:100%;object-fit:cover;object-position:center 24%;display:block;transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .8s}
+    .portrait-wrap:hover .profile-photo{transform:scale(1.045);filter:saturate(1.08)}
+    .portrait-wrap:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,rgba(15,18,18,.72));pointer-events:none}
+    .portrait-tag{position:absolute;z-index:2;left:18px;bottom:18px;color:#fff;font-size:8px;letter-spacing:1.4px;font-weight:700;display:flex;align-items:center;gap:9px}
+    .live-dot{width:7px;height:7px;border-radius:50%;background:#ef713b;box-shadow:0 0 0 5px rgba(239,113,59,.17)}
+    .portrait-stamp{position:absolute;z-index:2;right:15px;top:15px;width:58px;height:58px;border:1px solid rgba(255,255,255,.7);border-radius:50%;display:grid;place-content:center;text-align:center;color:white;font:800 15px Manrope;background:rgba(20,24,23,.28);backdrop-filter:blur(5px)}
+    .portrait-stamp small{font:600 8px "DM Sans";letter-spacing:2px}
+    .profile-art .art-caption{gap:10px}.profile-art .art-caption span{flex:1}
+    .hero-content>*{animation:riseIn .75s ease both}
+    .hero-content .eyebrow{animation-delay:.05s}.hero-content h1{animation-delay:.15s}.hero-content .hero-copy{animation-delay:.25s}.hero-content .hero-actions{animation-delay:.35s}.hero-content .hero-meta{animation-delay:.45s}
+    .expert-card,.credential-grid article,.contact-card{transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease}
+    .expert-card:hover,.credential-grid article:hover{transform:translateY(-7px);border-color:var(--orange)}
+    .contact-card:hover{border-color:var(--orange);box-shadow:0 15px 45px rgba(0,0,0,.15)}
+    .contact-link{transition:color .2s,padding-left .2s}.contact-link:hover{color:var(--orange);padding-left:7px}
+    @keyframes riseIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes floatIn{from{opacity:0;transform:translateY(25px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @media(max-width:680px){.portrait-wrap{height:390px;max-width:390px;margin:auto}.profile-art{margin-top:48px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+
 </head>
 <body>
+  <div id="loader" aria-hidden="true"><div class="floors"><b style="--i:0"></b><b style="--i:1"></b><b style="--i:2"></b><b style="--i:3"></b><b style="--i:4"></b></div><span>CHETAN PATIL / CIVIL ENGINEER</span></div>
+  <div id="progress"></div><div id="ruler" aria-hidden="true"><i></i></div>
   <div class="topline"></div>
   <header class="site-header">
     <a class="brand" href="#home" aria-label="Chetan Patil home"><span class="brand-mark">CP</span><span>CHETAN PATIL<span class="brand-sub">CIVIL ENGINEER</span></span></a>
@@ -24,30 +52,38 @@
   <main>
     <section class="hero" id="home">
       <div class="hero-grid"></div>
+      <canvas id="truss" aria-hidden="true"></canvas>
+      <svg class="skyline" viewBox="0 0 1200 220" preserveAspectRatio="xMaxYMax slice" aria-hidden="true"><defs><pattern id="win" width="14" height="16" patternUnits="userSpaceOnUse"><rect x="3" y="4" width="6" height="7" fill="rgba(239,113,59,.35)"/></pattern></defs>
+        <g class="bld"><rect style="--d:0" x="40" y="150" width="80" height="70"/><rect style="--d:1" x="135" y="110" width="60" height="110"/><rect style="--d:2" x="210" y="160" width="100" height="60"/><rect style="--d:3" x="330" y="135" width="70" height="85"/><rect style="--d:4" x="420" y="170" width="90" height="50"/><rect style="--d:5" x="560" y="150" width="70" height="70"/><rect style="--d:6" x="650" y="120" width="80" height="100"/><rect style="--d:7" x="750" y="165" width="100" height="55"/><rect style="--d:8" x="880" y="100" width="90" height="120"/></g>
+        <g class="crane"><path d="M1040 220V30M1054 220V30M1040 220L1054 200L1040 180L1054 160L1040 140L1054 120L1040 100L1054 80L1040 60L1054 40"/><g class="arm"><path d="M880 30H1190M1047 30V4M1047 4L880 30M1047 4L1190 30"/><rect x="1160" y="30" width="30" height="22"/><line class="cab" x1="930" y1="30" x2="930" y2="90"/><rect class="load" x="918" y="90" width="24" height="14"/><circle class="lamp" cx="1047" cy="4" r="4"/></g></g></svg>
       <div class="hero-content">
         <p class="eyebrow"><span></span> CIVIL ENGINEERING · EPC · PROJECT CONTROLS</p>
         <h1>Building progress.<br><em>Engineering</em> precision.</h1>
+        <p class="role">I work as <b id="typed">a Civil Engineer</b><i class="caret"></i></p>
         <p class="hero-copy">I’m <strong>Chetan Patil</strong>, a Civil Engineer at Megha Engineering and Infrastructures Ltd. focused on project planning, construction management, progress monitoring and site coordination.</p>
         <div class="hero-actions"><a class="button button-orange" href="#experience">Explore my experience <span>↗</span></a><a class="text-link" href="#contact">Get in touch <span>→</span></a></div>
         <div class="hero-meta"><div><strong>01+</strong><span>Years in project<br>planning & controls</span></div><div><strong>EPC</strong><span>Engineering &<br>construction</span></div><div><strong>PUNE</strong><span>Maharashtra,<br>India</span></div></div>
       </div>
-      <div class="hero-art" aria-label="Architectural blueprint inspired graphic">
-        <div class="art-label">STRUCTURE / 001</div>
-        <div class="blueprint">
-          <div class="blueprint-frame"></div><div class="tower tower-back"></div><div class="tower tower-front"></div>
-          <div class="floor-lines"></div><div class="dimension dim-one">+ 00.00</div><div class="dimension dim-two">LEVEL 04</div>
-          <div class="crosshair cross-one"></div><div class="crosshair cross-two"></div>
+      <div class="hero-art profile-art" aria-label="Chetan Patil professional portrait">
+        <div class="art-label">CIVIL ENGINEER / PUNE, INDIA</div>
+        <div class="portrait-wrap">
+          <img src="profile.jpg" alt="Professional portrait of Chetan Patil" class="profile-photo">
+          <div class="portrait-tag"><span class="live-dot"></span> OPEN TO PROFESSIONAL CONNECTIONS</div>
+          <div class="portrait-stamp">CP <small>2026</small></div>
         </div>
-        <div class="art-caption"><span>DESIGN THINKING</span><span>FIELD EXECUTION</span></div>
+        <div class="art-caption"><span>PLANNING</span><span>PRECISION</span><span>EXECUTION</span></div>
       </div>
       <div class="hero-bottom"><span>PORTFOLIO / 2026</span><span>SCROLL TO EXPLORE ↓</span></div>
     </section>
+
+    <div class="marquee" aria-hidden="true"><div><span>PROJECT PLANNING</span><span>S-CURVE REPORTING</span><span>BOQ AND BILLING</span><span>DRAWING APPROVALS</span><span>PROGRESS MONITORING</span><span>MS PROJECT</span><span>AUTOCAD</span><span>EPC DELIVERY</span></div></div>
 
     <section class="section about-section" id="about">
       <div class="section-kicker">01 / PROFILE</div>
       <div class="section-main">
         <h2>Engineering with<br><em>purpose and process.</em></h2>
         <div class="about-copy"><p class="lead">A civil engineering professional with hands-on experience supporting infrastructure project delivery, planning and execution.</p><p>At Megha Engineering and Infrastructures Ltd. (MEIL), I work across project planning, progress reporting, billing coordination, drawing submissions and project documentation. I enjoy bringing structure to complex site activities through clear reporting, coordination and disciplined project controls.</p><p class="location">⌖ &nbsp; Pune District, Maharashtra, India</p></div>
+        <div class="stats"><div><strong><span data-n="1">0</span>+</strong><p>Year in project planning and controls</p></div><div><strong><span data-n="4">0</span></strong><p>Report types: DPR, WPR, MPR, S-curve</p></div><div><strong><span data-n="3">0</span></strong><p>Professional credentials</p></div><div><strong><span data-n="2">0</span></strong><p>Civil engineering qualifications</p></div></div>
       </div>
     </section>
 
@@ -61,6 +97,8 @@
           <article class="expert-card"><span class="card-number">03</span><div class="line-icon">▧</div><h3>Billing & Quantity<br>Management</h3><p>BOQ quantities, client and subcontractor billing support, and invoicing coordination.</p></article>
           <article class="expert-card"><span class="card-number">04</span><div class="line-icon">⌂</div><h3>Construction<br>Coordination</h3><p>Site progress monitoring, vendor coordination, drawing submissions and approval follow-up.</p></article>
         </div>
+        <div class="scurve"><div><h3>Planned vs actual, week by week</h3><p>S-curve tracking is part of the daily rhythm of project controls: the grey line is the plan, the orange line is what the site delivered. Illustrative chart.</p></div>
+          <svg viewBox="0 0 520 260" role="img" aria-label="Animated S-curve comparing planned and actual progress"><g class="gl"><path d="M40 60H500M40 110H500M40 160H500" stroke="#2c3233"/></g><path class="ax" d="M40 20V220H500" fill="none"/><path class="pl" pathLength="1" d="M40 220C150 215 190 195 250 130S370 50 480 36"/><path class="ac" pathLength="1" d="M40 220C150 218 200 205 255 150S350 85 400 70"/><circle class="dot" cx="400" cy="70" r="6"/><text x="44" y="14">Progress</text><text x="456" y="240">Time</text><text x="430" y="30">Planned</text><text x="412" y="96">Actual</text></svg></div>
         <div class="tools-row"><span>TOOLS & TECHNOLOGIES</span><div><b>AutoCAD</b><b>Microsoft Project</b><b>Microsoft Excel</b><b>PowerPoint</b><b>Word</b></div></div>
       </div>
     </section>
@@ -98,11 +136,25 @@
 
     <section class="contact section-dark" id="contact">
       <div class="section-inner contact-inner"><div><div class="section-kicker">06 / CONTACT</div><h2>Let’s build<br><em>what’s next.</em></h2><p>For professional opportunities, project discussions or collaboration, feel free to connect.</p></div>
-        <div class="contact-card"><span class="contact-label">CONNECT WITH CHETAN</span><h3>Chetan Patil</h3><p>Civil Engineer · Pune, Maharashtra</p><a class="contact-link" href="https://www.linkedin.com/in/chetan-patil-23a8a425b/" target="_blank" rel="noopener">LinkedIn profile <span>↗</span></a><p class="update-note">Email and phone contact details can be added here.</p></div>
+        <div class="contact-card"><span class="contact-label">CONNECT WITH CHETAN</span><h3>Chetan Patil</h3><p>Civil Engineer · Pune, Maharashtra</p>
+          <a class="contact-link" href="mailto:Chetanspatil02@gmail.com">Email Chetan <span>↗</span></a>
+          <a class="contact-link" href="tel:+918208414996">Call +91 82084 14996 <span>↗</span></a>
+          <a class="contact-link" href="https://wa.me/918208414996" target="_blank" rel="noopener">WhatsApp <span>↗</span></a>
+          <a class="contact-link" href="https://www.linkedin.com/in/chetan-patil-23a8a425b/" target="_blank" rel="noopener">LinkedIn profile <span>↗</span></a>
+        </div>
       </div>
       <footer><a class="brand" href="#home"><span class="brand-mark">CP</span><span>CHETAN PATIL<span class="brand-sub">CIVIL ENGINEER</span></span></a><span>© <span id="year"></span> CHETAN PATIL · BUILT WITH PURPOSE</span><a href="#home">BACK TO TOP ↑</a></footer>
     </section>
   </main>
   <script src="script.js"></script>
+  <script>
+    const revealItems = document.querySelectorAll('.section, .section-dark, .timeline-item, .expert-card, .credential-grid article');
+    revealItems.forEach(el => el.classList.add('reveal-ready'));
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); revealObserver.unobserve(entry.target); } });
+    }, {threshold: 0.12});
+    revealItems.forEach(el => revealObserver.observe(el));
+  </script>
+  <style>.reveal-ready{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}.reveal-ready.revealed{opacity:1;transform:translateY(0)}@media(prefers-reduced-motion:reduce){.reveal-ready{opacity:1;transform:none;transition:none}}</style>
 </body>
 </html>

@@ -22,3 +22,7 @@ Open `index.html` in a browser.
 - Add real project photographs/details only with permission.
 - The Indian Concrete Institute entry is shown as expired in February 2026, based on the supplied LinkedIn screenshot.
 - Current role and dates are transcribed from the supplied screenshots; please verify them before publishing.
+
+
+## Files
+`index.html`, `style.css`, `animations.css`, `script.js` and `profile.jpg` must stay in the same folder. Animations respect the visitor's reduced-motion setting.
